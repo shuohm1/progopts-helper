@@ -5,7 +5,6 @@
 #include <sstream>
 #include <string>
 
-#include <boost/format.hpp>
 #include <boost/program_options.hpp>
 
 namespace progopts_helper {
@@ -63,9 +62,10 @@ std::string help_message(
 	// construct a help message
 	sout << POSARG_CAPTION << ":" << std::endl;
 	for (const auto opt: posarg_desc.options()) {
-		const auto ff = boost::format("  %%-%ds ") % max_length;
-		const auto name = boost::format(ff.str()) % opt->long_name();
-		sout << name.str() << opt->description() << std::endl;
+		const auto name = opt->long_name();
+		const size_t padlen = max_length - name.length();
+		sout << "  " << name << std::string(padlen, ' ') << " ";
+		sout << opt->description() << std::endl;
 	}
 	sout << optarg_desc;
 
